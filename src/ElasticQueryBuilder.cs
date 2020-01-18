@@ -10,6 +10,9 @@ namespace AJP.ElasticBand
             if (string.IsNullOrEmpty(searchString))
                 return string.Empty;
 
+            if (searchString.StartsWith("{"))
+                return searchString;
+
             if (searchString.Contains(":"))
             {
                 return BuildFieldQuery(searchString);
