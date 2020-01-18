@@ -1,0 +1,29 @@
+﻿{
+"version": true,
+"size": 500,
+"query": {
+      "bool": {   
+          "filter": [
+          {
+          "bool": {
+            "filter": [
+              {
+                "bool": {
+                  "should": [
+                    {
+                      "query_string": {
+                        "fields": ["email"],
+                        "query": "gmail*"
+                      }
+                    }
+                  ],
+                  "minimum_should_match": 1
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

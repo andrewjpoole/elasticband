@@ -1,0 +1,12 @@
+{
+  "version": true,
+  "size": 500,
+  "query": {
+    "bool": {
+      "must": 
+        [
+          { "match_phrase": { "cfDataType.keyword": "TestObject" }}
+        ]
+    }
+  }
+}

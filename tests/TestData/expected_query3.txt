@@ -1,0 +1,17 @@
+﻿{
+  "version": true,
+  "size": 500,
+  "query": {
+    "bool": {
+        "filter": [
+          {
+            "multi_match": {
+              "type": "best_fields",
+              "query": "bassguitar",
+              "lenient": true
+          }
+        }
+      ]
+    }
+  }
+}

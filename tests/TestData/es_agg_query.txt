@@ -1,0 +1,19 @@
+{
+  "version": true,
+  "size": 500,
+  "query": {
+    "bool": {
+      "must": 
+        [
+          { "match_phrase": { "cfDataType.keyword": "TestObject" }}
+        ]
+    }
+  },
+  "aggs": {
+    "test_aggregation": {
+      "terms": {
+        "field": "name.keyword"
+      }
+    }
+  }
+}
