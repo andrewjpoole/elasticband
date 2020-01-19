@@ -6,6 +6,8 @@ using AJP.ElasticBand;
 
 namespace Tests
 {
+    [TestFixture]
+    [Category("Integration")]
     public class ElasticRepositoryintegrationTests
     {
         private ElasticBand _elasticBand;

@@ -7,7 +7,9 @@ using AJP.ElasticBand;
 
 namespace Tests
 {
-    public class ElasticBandTests
+    [TestFixture]
+    [Category("Integration")]
+    public class ElasticBandIntegrationTests
     {
         private ElasticBand _sut;
         private readonly string _index = "test_index";
