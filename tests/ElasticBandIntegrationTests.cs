@@ -17,14 +17,14 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            _sut = new ElasticBand(new ElasticQueryBuilder());
+            _sut = new ElasticBand(new DefaultHttpClientFactory(), new ElasticQueryBuilder());
             _sut.GetClient().DeleteAsync(_index).Wait();
         }
 
         [TearDown]
         public void Teardown()
         {
-            _sut = new ElasticBand(new ElasticQueryBuilder());
+            _sut = new ElasticBand(new DefaultHttpClientFactory(), new ElasticQueryBuilder());
             _sut.GetClient().DeleteAsync(_index).Wait();
         }
 
@@ -54,7 +54,8 @@ namespace Tests
 
             await Task.Delay(1000); // Give ES a chance to internally update the indicies
 
-            var query = Path.Combine(TestContext.CurrentContext.WorkDirectory, "TestData\\es_query2.txt");
+            var queryPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "TestData\\es_query2.txt");
+            var query = File.ReadAllText(queryPath);
 
             var queryResponse = await _sut.Query<TestObject>(_index, query);
             Assert.That(queryResponse.Result, Is.EqualTo("found"));
@@ -103,7 +104,8 @@ namespace Tests
 
             await Task.Delay(1000); // Give ES a chance to internally update the indicies
 
-            var query = Path.Combine(TestContext.CurrentContext.WorkDirectory, "TestData\\es_agg_query.txt.txt");
+            var queryPath = Path.Combine(TestContext.CurrentContext.WorkDirectory, "TestData\\es_agg_query.txt");
+            var query = File.ReadAllText(queryPath);
 
             var queryResponse = await _sut.Query<TestObject>(_index, query);
             Assert.That(queryResponse.Result, Is.EqualTo("found"));

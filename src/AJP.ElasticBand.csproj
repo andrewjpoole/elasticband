@@ -7,14 +7,15 @@
     <Description>A wrapper around the plain http rest api, i.e. the one the the kibana dev tools uses.
 Strongly typed, but no dependencies. i.e. does not depend on NEST or newtonsoft.json.
 It basically only uses only httpClient and the new faster serialisers in System.Text.Json.</Description>
-    <PackageReleaseNotes>1.0.1) Updated the QueryBuilder to return the searchStraing as is if it starts with a curly opening brace
+    <PackageReleaseNotes>1.1.0) ElasticBand mow uses IHttpClientFactory to aid testability
+1.0.1) Updated the QueryBuilder to return the searchStraing as is if it starts with a curly opening brace
 1.0.0) initial version</PackageReleaseNotes>
     <IncludeSource>true</IncludeSource>
     <!-- Include symbol files (*.pdb) in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <AssemblyVersion>1.0.1.0</AssemblyVersion>
-    <FileVersion>1.0.1.0</FileVersion>
-    <Version>1.0.1</Version>
+    <AssemblyVersion>1.1.0.0</AssemblyVersion>
+    <FileVersion>1.1.0.0</FileVersion>
+    <Version>1.1.0</Version>
     <AssemblyName>AJP.ElasticBand</AssemblyName>
     <RootNamespace>AJP.ElasticBand</RootNamespace>
     <Company></Company>
@@ -26,6 +27,7 @@ It basically only uses only httpClient and the new faster serialisers in System.
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Http" Version="3.1.1" />
     <PackageReference Include="System.Text.Json" Version="4.7.0" />
   </ItemGroup>
 

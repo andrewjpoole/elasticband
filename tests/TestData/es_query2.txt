@@ -5,7 +5,7 @@
     "bool": {
       "must": 
         [
-          { "match_phrase": { "cfDataType.keyword": "TestObject" }}
+          { "match_phrase": { "ebDataType.keyword": "TestObject" }}
         ]
     }
   }

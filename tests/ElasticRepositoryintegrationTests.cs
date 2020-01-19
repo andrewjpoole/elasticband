@@ -8,7 +8,7 @@ namespace Tests
 {
     [TestFixture]
     [Category("Integration")]
-    public class ElasticRepositoryintegrationTests
+    public class ElasticRepositoryIntegrationTests
     {
         private ElasticBand _elasticBand;
         private readonly string _index = "test_index";
@@ -16,14 +16,14 @@ namespace Tests
         [SetUp]
         public void Setup()
         {
-            _elasticBand = new ElasticBand(new ElasticQueryBuilder());
+            _elasticBand = new ElasticBand(new DefaultHttpClientFactory(), new ElasticQueryBuilder());
             _elasticBand.GetClient().DeleteAsync(_index).Wait();
         }
 
         [TearDown]
         public void Teardown()
         {
-            _elasticBand = new ElasticBand(new ElasticQueryBuilder());
+            _elasticBand = new ElasticBand(new DefaultHttpClientFactory(), new ElasticQueryBuilder());
             _elasticBand.GetClient().DeleteAsync(_index).Wait();
         }
 

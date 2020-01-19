@@ -14,9 +14,10 @@ namespace AJP.ElasticBand
     {
         private readonly string _elasticSearchUri = "http://localhost:9200";
         private readonly JsonSerializerOptions _jsonSerializerOptions;
+        private readonly IHttpClientFactory _httpClientFactory;
         private readonly IElasticQueryBuilder _queryBuilder;
 
-        public ElasticBand(IElasticQueryBuilder queryBuilder, JsonSerializerOptions jsonDeserialisationOptions = null, string elasticSearchUri = "")
+        public ElasticBand(IHttpClientFactory httpClientFactory, IElasticQueryBuilder queryBuilder, JsonSerializerOptions jsonDeserialisationOptions = null, string elasticSearchUri = "")
         {
             if (jsonDeserialisationOptions != null)
                 _jsonSerializerOptions = jsonDeserialisationOptions;
@@ -33,6 +34,7 @@ namespace AJP.ElasticBand
 
             if (!string.IsNullOrEmpty(elasticSearchUri))
                 _elasticSearchUri = elasticSearchUri;
+            _httpClientFactory = httpClientFactory;
             _queryBuilder = queryBuilder;
         }
 
@@ -234,10 +236,8 @@ namespace AJP.ElasticBand
 
         public HttpClient GetClient()
         {
-            var client = new HttpClient
-            {
-                BaseAddress = new Uri(_elasticSearchUri)
-            };
+            var client = _httpClientFactory.CreateClient();
+            client.BaseAddress = new Uri(_elasticSearchUri);
 
             client.DefaultRequestHeaders
                       .Accept
