@@ -36,6 +36,6 @@ steps:
       !**\*TestAdapter.dll
       !**\obj\**
     searchFolder: '$(System.DefaultWorkingDirectory)'
-    testFiltercriteria: 'Category!="Integration"'
+    testFiltercriteria: 'Category!=Integration'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
