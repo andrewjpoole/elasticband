@@ -1,4 +1,6 @@
 ﻿# ElasticBand
+ 
+ [![Build Status](https://andrewjpoole.visualstudio.com/elasticband/_apis/build/status/andrewjpoole.elasticband?branchName=master)](https://andrewjpoole.visualstudio.com/elasticband/_build/latest?definitionId=3&branchName=master)
 
 ## WHAT?
 
@@ -17,3 +19,7 @@ I haven't included calls to the bulk api, the official client libraries should b
 ## CHANGES
 
 Feel free to change/contribute
+
+## Rest API
+
+I have also created a rest api over the top of the ElasticBand, making it trivial to use Elasticsearch as a backend for storing simple collections of items via Swagger, which dynamically renders a controller for each collection etc see project [here](https://github.com/andrewjpoole/elasticband.api)
