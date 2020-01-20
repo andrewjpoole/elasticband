@@ -1,7 +1,7 @@
-﻿# ElasticBand
+# ElasticBand
  
- [![Build Status](https://andrewjpoole.visualstudio.com/elasticband/_apis/build/status/andrewjpoole.elasticband?branchName=master)](https://andrewjpoole.visualstudio.com/elasticband/_build/latest?definitionId=3&branchName=master)
-
+ ![build](https://andrewjpoole.visualstudio.com/elasticband/_apis/build/status/andrewjpoole.elasticband?branchName=master)
+ 
 ## WHAT?
 
 A wrapper around the plain http rest api, i.e. the one the the kibana dev tools uses.
