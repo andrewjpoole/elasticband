@@ -17,7 +17,7 @@ namespace AJP.ElasticBand
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IElasticQueryBuilder _queryBuilder;
 
-        public ElasticBand(IHttpClientFactory httpClientFactory, IElasticQueryBuilder queryBuilder, JsonSerializerOptions jsonDeserialisationOptions = null, string elasticSearchUri = "")
+        public ElasticBand(IHttpClientFactory httpClientFactory, IElasticQueryBuilder queryBuilder, string elasticSearchUri = "", JsonSerializerOptions jsonDeserialisationOptions = null)
         {
             if (jsonDeserialisationOptions != null)
                 _jsonSerializerOptions = jsonDeserialisationOptions;
