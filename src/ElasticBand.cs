@@ -12,30 +12,33 @@ namespace AJP.ElasticBand
 {
     public class ElasticBand : IElasticBand
     {
-        private readonly string _elasticSearchUri = "http://localhost:9200";
-        private readonly JsonSerializerOptions _jsonSerializerOptions;
+        private string _elasticsearchUri = "http://localhost:9200";
+        private JsonSerializerOptions _jsonSerializerOptions;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IElasticQueryBuilder _queryBuilder;
 
-        public ElasticBand(IHttpClientFactory httpClientFactory, IElasticQueryBuilder queryBuilder, string elasticSearchUri = "", JsonSerializerOptions jsonDeserialisationOptions = null)
-        {
-            if (jsonDeserialisationOptions != null)
-                _jsonSerializerOptions = jsonDeserialisationOptions;
-            else
+        public ElasticBand(IHttpClientFactory httpClientFactory, IElasticQueryBuilder queryBuilder)
+        {            
+            _jsonSerializerOptions = new JsonSerializerOptions
             {
-                _jsonSerializerOptions = new JsonSerializerOptions
-                {
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-                    PropertyNameCaseInsensitive = true,
-                    WriteIndented = true
-                };
-                _jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-            }
-
-            if (!string.IsNullOrEmpty(elasticSearchUri))
-                _elasticSearchUri = elasticSearchUri;
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                PropertyNameCaseInsensitive = true,
+                WriteIndented = true
+            };
+            _jsonSerializerOptions.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
+                     
             _httpClientFactory = httpClientFactory;
             _queryBuilder = queryBuilder;
+        }
+
+        public void SetElasticsearchUrl(string url) 
+        {
+            _elasticsearchUri = url;
+        }
+
+        public void SetJsonSerialiserOptions(JsonSerializerOptions options) 
+        {
+            _jsonSerializerOptions = options;
         }
 
         public async Task<ElasticBandResponse<T>> GetDocumentByID<T>(string index, string id)
@@ -237,7 +240,7 @@ namespace AJP.ElasticBand
         public HttpClient GetClient()
         {
             var client = _httpClientFactory.CreateClient();
-            client.BaseAddress = new Uri(_elasticSearchUri);
+            client.BaseAddress = new Uri(_elasticsearchUri);
 
             client.DefaultRequestHeaders
                       .Accept
