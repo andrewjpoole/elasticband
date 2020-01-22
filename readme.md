@@ -16,9 +16,9 @@ It covers basic CRUD operations and supports queries either via rest body (i.e. 
 
 It doesn't include any calls to the bulk api as yet, the official client libraries should be used instead for that.
 
-## CHANGES
+## Contributing
 
-Feel free to change/contribute
+Contributions would be most welcome! the only thing I ask is that new features are covered by minimal unit tests, along the same lines as the existing ones.
 
 ## Rest API
 
