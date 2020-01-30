@@ -47,3 +47,10 @@ steps:
     nuGetFeedType: 'internal'
     publishVstsFeed: 'cdadc2b6-5273-431d-b963-d334c86e308b/c9e635c6-37d6-4589-8ca7-20d9bd6f8540'
     allowPackageConflicts: true
+
+- task: NuGetCommand@2
+  continueOnError: true
+  inputs:
+    command: 'push'
+    packagesToPush: '$(System.DefaultWorkingDirectory)/**/*.nupkg;!$(System.DefaultWorkingDirectory)/**/*.symbols.nupkg'    
+    allowPackageConflicts: true
