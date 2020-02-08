@@ -12,6 +12,8 @@ namespace Tests
         [TestCase("email:gmail* and notes:bass*", "expected_query1.txt")]
         [TestCase("email:gmail*", "expected_query2.txt")]
         [TestCase("bassguitar", "expected_query3.txt")]
+        [TestCase("birthday < 2019-02-07T22:16:52.626Z", "expected_query4.txt")]
+        [TestCase("name > h", "expected_query5.txt")]
         public void QueryBuilder_should_return_correct_query_for_string(string searchString, string expectedQueryFileName) 
         {
             var sut = new ElasticQueryBuilder();

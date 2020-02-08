@@ -5,7 +5,7 @@ namespace AJP.ElasticBand
 {
     public class ElasticQueryBuilder : IElasticQueryBuilder
     {
-        public string Build(string searchString)
+        public string Build(string searchString, int limit = 500)
         {
             if (string.IsNullOrEmpty(searchString))
                 return string.Empty;
@@ -13,20 +13,24 @@ namespace AJP.ElasticBand
             if (searchString.StartsWith("{"))
                 return searchString;
 
-            if (searchString.Contains(":"))
-            {
-                return BuildFieldQuery(searchString);
-            }
+            if (searchString.Contains("<") || searchString.Contains(">"))            
+                return BuildRangeQuery(searchString, limit);            
 
-            return BuildSingleStringQuery(searchString);
+            if (searchString.Contains(":"))            
+                return BuildFieldQuery(searchString, limit);
+
+            if (searchString.Contains("*"))
+                return BuildWildcardQuery(searchString, limit);
+
+            return BuildSingleStringQuery(searchString, limit);
         }
 
-        private string BuildFieldQuery(string searchString) 
+        private string BuildFieldQuery(string searchString, int limit) 
         {
             var sb = new StringBuilder();
             sb.AppendLine("{");
             sb.AppendLine("\"version\": true,");
-            sb.AppendLine("\"size\": 500,");
+            sb.AppendLine($"\"size\": {limit},");
             sb.AppendLine("\"query\": {");
             sb.AppendLine("      \"bool\": {   ");
             sb.AppendLine("          \"filter\": [");
@@ -38,8 +42,8 @@ namespace AJP.ElasticBand
             foreach (var clause in queryClauses) 
             {
                 var parts = clause.Split(':');
-                var key = parts[0];
-                var value = parts[1];
+                var key = parts[0].Trim();
+                var value = parts[1].Trim();
 
                 sb.AppendLine("              {");
                 sb.AppendLine("                \"bool\": {");
@@ -69,13 +73,13 @@ namespace AJP.ElasticBand
             return sb.ToString();
         }
 
-        private string BuildSingleStringQuery(string searchString)
+        private string BuildSingleStringQuery(string searchString, int limit)
         {
             var sb = new StringBuilder();
 
             sb.AppendLine("{");
             sb.AppendLine("  \"version\": true,");
-            sb.AppendLine("  \"size\": 500,");
+            sb.AppendLine($"  \"size\": {limit},");
             sb.AppendLine("  \"query\": {");
             sb.AppendLine("    \"bool\": {");
             sb.AppendLine("        \"filter\": [");
@@ -84,6 +88,61 @@ namespace AJP.ElasticBand
             sb.AppendLine("              \"type\": \"best_fields\",");
             sb.AppendLine($"              \"query\": \"{searchString}\",");
             sb.AppendLine("              \"lenient\": true");
+            sb.AppendLine("          }");
+            sb.AppendLine("        }");
+            sb.AppendLine("      ]");
+            sb.AppendLine("    }");
+            sb.AppendLine("  }");
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string BuildRangeQuery(string searchString, int limit) 
+        {
+            var parts = searchString.Split(new[] { '<', '>' });
+            var key = parts[0].Trim();
+            var value = parts[1].Trim();
+            var queryOperator = searchString.Contains("<") ? "lte" : "gte";
+
+            var sb = new StringBuilder();
+
+            sb.AppendLine("{");
+            sb.AppendLine("  \"version\": true,");
+            sb.AppendLine($"  \"size\": {limit},");
+            sb.AppendLine("  \"query\": {");
+            sb.AppendLine("    \"bool\": {");
+            sb.AppendLine("      \"must\": [");
+            sb.AppendLine("        {");
+            sb.AppendLine("          \"range\": {");
+            sb.AppendLine($"            \"{key}\": {{");
+            //sb.AppendLine("              \"format\": \"strict_date_optional_time\","); // dont think this is needed even for dates
+            sb.AppendLine($"              \"{queryOperator}\": \"{value}\"");
+            sb.AppendLine("            }");
+            sb.AppendLine("          }");
+            sb.AppendLine("        }");
+            sb.AppendLine("      ]");
+            sb.AppendLine("    }");
+            sb.AppendLine("  }");
+            sb.AppendLine("}");
+
+            return sb.ToString();
+        }
+
+        private string BuildWildcardQuery(string searchString, int limit)
+        {          
+            var sb = new StringBuilder();
+
+            sb.AppendLine("{");
+            sb.AppendLine("  \"version\": true,");
+            sb.AppendLine($"  \"size\": {limit},");
+            sb.AppendLine("  \"query\": {");
+            sb.AppendLine("    \"bool\": {");
+            sb.AppendLine("      \"must\": [");
+            sb.AppendLine("        {");
+            sb.AppendLine("          \"query_string\": {");
+            sb.AppendLine($"            \"query\": \"{searchString}\",");
+            sb.AppendLine("            \"analyze_wildcard\": true");
             sb.AppendLine("          }");
             sb.AppendLine("        }");
             sb.AppendLine("      ]");

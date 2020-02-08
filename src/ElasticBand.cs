@@ -31,16 +31,31 @@ namespace AJP.ElasticBand
             _queryBuilder = queryBuilder;
         }
 
+        /// <summary>
+        /// Override the default Elasticsearch URL
+        /// </summary>
+        /// <param name="url">A string containing the url</param>
         public void SetElasticsearchUrl(string url) 
         {
             _elasticsearchUri = url;
         }
 
+        /// <summary>
+        /// Override the Json serializer options
+        /// </summary>
+        /// <param name="options">A JsonSerializerOptions containing specified options, to be applied to all serialisation calls.</param>
         public void SetJsonSerialiserOptions(JsonSerializerOptions options) 
         {
             _jsonSerializerOptions = options;
         }
 
+        /// <summary>
+        /// Fetch an object (T) from Elasticsearch, fast lookup by id.
+        /// </summary>
+        /// <typeparam name="T">The Type of the object to query.</typeparam>
+        /// <param name="index">A string containing the Elasticsearch index name.</param>
+        /// <param name="id">A string containing the id of the object to fetch.</param>
+        /// <returns>An ElasticBandResponse, where Data is an object (T) containing the fetched object.</returns>
         public async Task<ElasticBandResponse<T>> GetDocumentByID<T>(string index, string id)
         {
             CheckIndex(index);
@@ -82,7 +97,16 @@ namespace AJP.ElasticBand
             }
         }
 
-        public async Task<ElasticBandResponse<List<T>>> Query<T>(string index, string searchTerms, bool useQueryBuilder = true)
+        /// <summary>
+        /// Fetch objects (T) using a query.
+        /// </summary>
+        /// <typeparam name="T">The Type of the object to query.</typeparam>
+        /// <param name="index">A string containing the Elasticsearch index name.</param>
+        /// <param name="searchTerms">The query string, see documentation for examples</param>
+        /// <param name="useQueryBuilder">A bool which determines if the query string should be used to generate ES query syntax to be used in the body of the request to Elasticsearch. Defaults to true.</param>
+        /// <param name="limit">An int which if using the QueryBuilder, will liit the number of objects returned. Defaults to 500.</param>
+        /// <returns>An ElasticBandResponse, where Data is a List<T> containing the matching objects.</returns>
+        public async Task<ElasticBandResponse<List<T>>> Query<T>(string index, string searchTerms, bool useQueryBuilder = true, int limit = 500)
         {
             CheckIndex(index);
 
@@ -95,7 +119,7 @@ namespace AJP.ElasticBand
                 string query;
 
                 if (useQueryBuilder)
-                    query = _queryBuilder.Build(searchTerms);
+                    query = _queryBuilder.Build(searchTerms, limit);
                 else
                     query = searchTerms;
 
@@ -147,13 +171,21 @@ namespace AJP.ElasticBand
                 };
             }
         }
-        
+
+        /// <summary>
+        /// Index an object (T) into Elasticsearch (create or update).
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="index">A string containing the Elasticsearch index name.</param>
+        /// <param name="data">The object to index.</param>
+        /// <param name="id">A string containing the id of the object to index. If empty, a new uid will be generated.</param>
+        /// <returns>An ElasticBandResponse</returns>
         public async Task<ElasticBandResponse<T>> Index<T>(string index, T data, string id = null)
         {
             CheckIndex(index);
 
             if (string.IsNullOrEmpty(id))
-                throw new ArgumentException("id must not be null or empty");
+                id = Guid.NewGuid().ToString();
 
             var requestUri = $"{index}/_doc/{id}";
             using (var client = GetClient())
@@ -190,6 +222,12 @@ namespace AJP.ElasticBand
             }
         }
 
+        /// <summary>
+        /// Delete an object from an index.
+        /// </summary>
+        /// <param name="index">A string containing the Elasticsearch index name.</param>
+        /// <param name="id">A string containing the id of the object to fetch.</param>
+        /// <returns>An ElasticBandResponse</returns>
         public async Task<ElasticBandResponse> Delete(string index, string id)
         {
             CheckIndex(index);
@@ -237,6 +275,10 @@ namespace AJP.ElasticBand
                 throw new ArgumentException("Elasticsearch Index name must not be empty.");
         }
 
+        /// <summary>
+        /// Access a client configured to send requests to Elasticsearch
+        /// </summary>
+        /// <returns>An HttpClient</returns>
         public HttpClient GetClient()
         {
             var client = _httpClientFactory.CreateClient();

@@ -2,6 +2,6 @@
 {
     public interface IElasticQueryBuilder 
     {
-        string Build(string searchString);
+        string Build(string searchString, int limit = 500);
     }
 }

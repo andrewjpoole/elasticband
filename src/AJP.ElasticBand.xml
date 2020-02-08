@@ -1,0 +1,154 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AJP.ElasticBand</name>
+    </assembly>
+    <members>
+        <member name="M:AJP.ElasticBand.ElasticBand.SetElasticsearchUrl(System.String)">
+            <summary>
+            Override the default Elasticsearch URL
+            </summary>
+            <param name="url">A string containing the url</param>
+        </member>
+        <member name="M:AJP.ElasticBand.ElasticBand.SetJsonSerialiserOptions(System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Override the Json serializer options
+            </summary>
+            <param name="options">A JsonSerializerOptions containing specified options, to be applied to all serialisation calls.</param>
+        </member>
+        <member name="M:AJP.ElasticBand.ElasticBand.GetDocumentByID``1(System.String,System.String)">
+            <summary>
+            Fetch an object (T) from Elasticsearch, fast lookup by id.
+            </summary>
+            <typeparam name="T">The Type of the object to query.</typeparam>
+            <param name="index">A string containing the Elasticsearch index name.</param>
+            <param name="id">A string containing the id of the object to fetch.</param>
+            <returns>An ElasticBandResponse, where Data is an object (T) containing the fetched object.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:AJP.ElasticBand.ElasticBand.Query``1(System.String,System.String,System.Boolean,System.Int32)" -->
+        <member name="M:AJP.ElasticBand.ElasticBand.Index``1(System.String,``0,System.String)">
+            <summary>
+            Index an object (T) into Elasticsearch (create or update).
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="index">A string containing the Elasticsearch index name.</param>
+            <param name="data">The object to index.</param>
+            <param name="id">A string containing the id of the object to index. If empty, a new uid will be generated.</param>
+            <returns>An ElasticBandResponse</returns>
+        </member>
+        <member name="M:AJP.ElasticBand.ElasticBand.Delete(System.String,System.String)">
+            <summary>
+            Delete an object from an index.
+            </summary>
+            <param name="index">A string containing the Elasticsearch index name.</param>
+            <param name="id">A string containing the id of the object to fetch.</param>
+            <returns>An ElasticBandResponse</returns>
+        </member>
+        <member name="M:AJP.ElasticBand.ElasticBand.GetClient">
+            <summary>
+            Access a client configured to send requests to Elasticsearch
+            </summary>
+            <returns>An HttpClient</returns>
+        </member>
+        <member name="P:AJP.ElasticBand.ElasticRepository`1.IndexName">
+            <summary>
+            The index name in Elasticsearch
+            </summary>
+        </member>
+        <member name="M:AJP.ElasticBand.ElasticRepository`1.#ctor(System.String,AJP.ElasticBand.IElasticBand)">
+            <summary>
+            public constructor
+            </summary>
+            <param name="indexName">The index name in Elasticsearch</param>
+            <param name="elasticBand">An instance of the ElasticBand which internally does all of the work.</param>
+        </member>
+        <member name="M:AJP.ElasticBand.ElasticRepository`1.Index(System.String,`0)">
+            <summary>
+            Index an object(T) into Elasticsearch (create or update).
+            </summary>
+            <param name="id">A string containing the id of the document, if empty a new Guid will be generated.</param>
+            <param name="data">The object to index.</param>
+            <returns>An ElasticBandResponse</returns>
+        </member>
+        <member name="M:AJP.ElasticBand.ElasticRepository`1.GetById(System.String)">
+            <summary>
+            Fetch an object (T) from Elasticsearch, fast lookup by id.
+            </summary>
+            <param name="id">A string containing the id of the document in Elasticsearch</param>
+            <returns>An ElasticBandResponse, where Data is an object (T) containing the fetched object.</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:AJP.ElasticBand.ElasticRepository`1.Query(System.String,System.Boolean,System.Int32)" -->
+        <member name="M:AJP.ElasticBand.ElasticRepository`1.Delete(System.String)">
+            <summary>
+            Delete an object.
+            </summary>
+            <param name="id">A string containing the id of the object to delete.</param>
+            <returns>An ElasticBandResponse</returns>
+        </member>
+        <member name="M:AJP.ElasticBand.IElasticBand.SetElasticsearchUrl(System.String)">
+            <summary>
+            Override the default Elasticsearch URL
+            </summary>
+            <param name="url">A string containing the url</param>
+        </member>
+        <member name="M:AJP.ElasticBand.IElasticBand.SetJsonSerialiserOptions(System.Text.Json.JsonSerializerOptions)">
+            <summary>
+            Override the Json serializer options
+            </summary>
+            <param name="options">A JsonSerializerOptions containing specified options, to be applied to all serialisation calls.</param>
+        </member>
+        <member name="M:AJP.ElasticBand.IElasticBand.Delete(System.String,System.String)">
+            <summary>
+            Delete an object from an index.
+            </summary>
+            <param name="index">A string containing the Elasticsearch index name.</param>
+            <param name="id">A string containing the id of the object to fetch.</param>
+            <returns>An ElasticBandResponse</returns>
+        </member>
+        <member name="M:AJP.ElasticBand.IElasticBand.Index``1(System.String,``0,System.String)">
+            <summary>
+            Index an object (T) into Elasticsearch (create or update).
+            </summary>
+            <typeparam name="T"></typeparam>
+            <param name="index">A string containing the Elasticsearch index name.</param>
+            <param name="data">The object to index.</param>
+            <param name="id">A string containing the id of the object to index. If empty, a new uid will be generated.</param>
+            <returns>An ElasticBandResponse</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:AJP.ElasticBand.IElasticBand.Query``1(System.String,System.String,System.Boolean,System.Int32)" -->
+        <member name="M:AJP.ElasticBand.IElasticBand.GetClient">
+            <summary>
+            Access a client configured to send requests to Elasticsearch
+            </summary>
+            <returns>An HttpClient</returns>
+        </member>
+        <member name="P:AJP.ElasticBand.IElasticRepository`1.IndexName">
+            <summary>
+            The index name in Elasticsearch.
+            </summary>
+        </member>
+        <member name="M:AJP.ElasticBand.IElasticRepository`1.Delete(System.String)">
+            <summary>
+            Delete an object.
+            </summary>
+            <param name="id">A string containing the id of the object to delete.</param>
+            <returns>An ElasticBandResponse</returns>
+        </member>
+        <member name="M:AJP.ElasticBand.IElasticRepository`1.GetById(System.String)">
+            <summary>
+            Fetch an object (T) from Elasticsearch, fast lookup by id.
+            </summary>
+            <param name="id">A string containing the id of the document in Elasticsearch</param>
+            <returns>An ElasticBandResponse, where Data is an object (T) containing the fetched object.</returns>
+        </member>
+        <member name="M:AJP.ElasticBand.IElasticRepository`1.Index(System.String,`0)">
+            <summary>
+            Index an object(T) into Elasticsearch (create or update).
+            </summary>
+            <param name="id">A string containing the id of the document, if empty a new Guid will be generated.</param>
+            <param name="data">The object to index.</param>
+            <returns>An ElasticBandResponse</returns>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:AJP.ElasticBand.IElasticRepository`1.Query(System.String,System.Boolean,System.Int32)" -->
+    </members>
+</doc>

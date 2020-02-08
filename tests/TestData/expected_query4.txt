@@ -1,0 +1,17 @@
+﻿{
+  "version": true,
+  "size": 500,
+  "query": {
+    "bool": {
+      "must": [
+        {
+          "range": {
+            "birthday": {
+              "lte": "2019-02-07T22:16:52.626Z"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
