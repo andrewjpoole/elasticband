@@ -7,7 +7,8 @@
     <Description>A wrapper around the plain http rest api, i.e. the one the the kibana dev tools uses.
 Strongly typed, but no dependencies. i.e. does not depend on NEST or newtonsoft.json.
 It basically only uses only httpClient and the new faster serialisers in System.Text.Json.</Description>
-    <PackageReleaseNotes>1.5.0) Added some more query options and abillity to specify the size (number) of records to return on a query.
+    <PackageReleaseNotes>1.6.0) Added auth options
+1.5.0) Added some more query options and abillity to specify the size (number) of records to return on a query.
 1.4.0) Added ServiceProvider extension method to add nessecary services into DI.
 1.3.1) Added setelasticsearchirl and setjsonserialisationoptions methods to the interface
 1.3.0) Moved setup of json serialisation options and the elasticsearch url to seperate methods.
@@ -18,9 +19,9 @@ It basically only uses only httpClient and the new faster serialisers in System.
     <IncludeSource>true</IncludeSource>
     <!-- Include symbol files (*.pdb) in the built .nupkg -->
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-    <AssemblyVersion>1.5.0.0</AssemblyVersion>
-    <FileVersion>1.5.0.0</FileVersion>
-    <Version>1.5.0</Version>
+    <AssemblyVersion>1.6.0.0</AssemblyVersion>
+    <FileVersion>1.6.0.0</FileVersion>
+    <Version>1.6.0</Version>
     <AssemblyName>AJP.ElasticBand</AssemblyName>
     <RootNamespace>AJP.ElasticBand</RootNamespace>
     <Company></Company>
