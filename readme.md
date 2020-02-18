@@ -108,7 +108,9 @@ public async Task ElasticRepository_methods_should_index_get_query_and_delete_do
 
 It doesn't include any calls to the bulk api as yet, the official client libraries should be used instead for that.
 
-## Use
+Elasticsearch auth will be coming soon.
+
+## License
 
 Feel free to use for whatever - MIT license. If its usefull please let me know!
 
