@@ -9,6 +9,7 @@ namespace AJP.ElasticBand
         public bool Ok { get; set; }
         public string DataJson { get; set; }
         public string Id { get; set; }
+        public string Errors { get; set; }
         public string Warnings { get; set; }
         public string Result { get; set; }
         public HttpStatusCode StatusCode { get; set; }

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -13,6 +16,9 @@ namespace AJP.ElasticBand
     public class ElasticBand : IElasticBand
     {
         private string _elasticsearchUri = "http://localhost:9200";
+        private string _username;
+        private string _password;
+        private string _apiKey;
         private JsonSerializerOptions _jsonSerializerOptions;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IElasticQueryBuilder _queryBuilder;
@@ -38,6 +44,32 @@ namespace AJP.ElasticBand
         public void SetElasticsearchUrl(string url) 
         {
             _elasticsearchUri = url;
+        }
+
+        /// <summary>
+        /// Method to set username and password, used to dd a basic auth header to authenticate with elasticsearch.
+        /// </summary>
+        /// <param name="username">A string containing the username.</param>
+        /// <param name="password">A string containing the password.</param>
+        public void SetElasticsearchAuthentication(string username, string password) 
+        {
+            if (string.IsNullOrEmpty(username + password))
+                throw new ArgumentException("username and password must not be empty");
+
+            _username = username;
+            _password = password;
+        }
+
+        /// <summary>
+        /// Method to set apiKey, used to dd a basic auth header to authenticate with elasticsearch.
+        /// </summary>
+        /// <param name="apiKey">A string containing the preconfigured apiKey.</param>
+        public void SetElasticsearchAuthentication(string apiKey)
+        {
+            if (string.IsNullOrEmpty(apiKey))
+                throw new ArgumentException("apiKey must not be empty");
+
+            _apiKey = apiKey;
         }
 
         /// <summary>
@@ -70,6 +102,7 @@ namespace AJP.ElasticBand
                 var warnings = GetWarnings(response.Headers);
 
                 var json = await response.Content.ReadAsStringAsync();
+                var errors = CheckJsonForErrors(json);
                 var data = (ElasticDocumentResponse<T>)JsonSerializer.Deserialize(json, typeof(ElasticDocumentResponse<T>), _jsonSerializerOptions);
 
                 if (response.IsSuccessStatusCode)
@@ -80,6 +113,7 @@ namespace AJP.ElasticBand
                         StatusCode = response.StatusCode,
                         Result = data.found ? "found" : "not_found",
                         Warnings = warnings,
+                        Errors = errors,
                         DataJson = json,
                         Data = data._source,
                         Id = id
@@ -90,6 +124,8 @@ namespace AJP.ElasticBand
                 {
                     Ok = false,
                     Warnings = warnings,
+                    Errors = errors,
+                    DataJson = json,
                     StatusCode = response.StatusCode,
                     Result = data.found ? "found" : "not_found",
                     Id = id
@@ -136,6 +172,7 @@ namespace AJP.ElasticBand
                 var warnings = GetWarnings(response.Headers);
 
                 var json = await response.Content.ReadAsStringAsync();
+                var errors = CheckJsonForErrors(json);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -154,6 +191,7 @@ namespace AJP.ElasticBand
                         Ok = true,
                         StatusCode = response.StatusCode,
                         Warnings = warnings,
+                        Errors = errors,
                         DataJson = json,
                         Data = hits,
                         Result = hits.Any() ? "found" : "not_found",
@@ -165,6 +203,7 @@ namespace AJP.ElasticBand
                 {
                     Ok = false,
                     Warnings = warnings,
+                    Errors = errors,
                     StatusCode = response.StatusCode,
                     DataJson = json,
                     Result = "not_found"
@@ -195,6 +234,7 @@ namespace AJP.ElasticBand
                 var warnings = GetWarnings(response.Headers);
 
                 var json = await response.Content.ReadAsStringAsync();
+                var errors = CheckJsonForErrors(json);
                 var responseData = (ElasticIndexResult)JsonSerializer.Deserialize(json, typeof(ElasticIndexResult), _jsonSerializerOptions);
                 
                 if (response.IsSuccessStatusCode)
@@ -206,6 +246,7 @@ namespace AJP.ElasticBand
                         Result = responseData.result,
                         Id = id,
                         Warnings = warnings,
+                        Errors = errors,
                         DataJson = json,
                         Data = data,
                     };
@@ -215,6 +256,7 @@ namespace AJP.ElasticBand
                 {
                     Ok = false,
                     Warnings = warnings,
+                    Errors = errors,
                     StatusCode = response.StatusCode,
                     Result = responseData.result,
                     DataJson = json
@@ -242,6 +284,7 @@ namespace AJP.ElasticBand
                 var warnings = GetWarnings(response.Headers);
 
                 var json = await response.Content.ReadAsStringAsync();
+                var errors = CheckJsonForErrors(json);
                 var responseData = (ElasticIndexResult)JsonSerializer.Deserialize(json, typeof(ElasticIndexResult), _jsonSerializerOptions);
 
                 return new ElasticBandResponse
@@ -251,6 +294,7 @@ namespace AJP.ElasticBand
                     Result = responseData?.result,
                     DataJson = json,
                     Warnings = warnings,
+                    Errors = errors,
                     Id = id
                 };
             }
@@ -267,6 +311,16 @@ namespace AJP.ElasticBand
                 }
             }
             return warnings.ToString();
+        }
+
+        private string CheckJsonForErrors(string json) 
+        {
+            var errorResponse = JsonSerializer.Deserialize<ElasticErrorResponse>(json);
+            if (errorResponse.error != null)
+            {
+                return errorResponse.error.reason;
+            }
+            return string.Empty;
         }
 
         private void CheckIndex(string index)
@@ -287,8 +341,21 @@ namespace AJP.ElasticBand
             client.DefaultRequestHeaders
                       .Accept
                       .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            
+            if (!string.IsNullOrEmpty(_apiKey))
+            {
+                string creds = Convert.ToBase64String(Encoding.ASCII.GetBytes(_apiKey));
+                client.DefaultRequestHeaders.Add("Authorization", "ApiKey " + creds);
+            }
+            else if (!string.IsNullOrEmpty(_username + _password)) 
+            {
+                string creds = Convert.ToBase64String(Encoding.ASCII.GetBytes(_username + ":" + _password));
+                client.DefaultRequestHeaders.Add("Authorization", "Basic " + creds);            
+            }
 
             return client;
+
+            
         }        
     }
 }

@@ -18,15 +18,17 @@ namespace Tests
         public void Setup()
         {
             _sut = new ElasticBand(new DefaultHttpClientFactory(), new ElasticQueryBuilder());
+            _sut.SetElasticsearchUrl("https://localhost:9200");
+            _sut.SetElasticsearchAuthentication("B0pGRnABUbqCwsoaMxi0:gexHoph8SnK_HpTuLkOgtw");
             _sut.GetClient().DeleteAsync(_index).Wait();
         }
 
-        [TearDown]
-        public void Teardown()
-        {
-            _sut = new ElasticBand(new DefaultHttpClientFactory(), new ElasticQueryBuilder());
-            _sut.GetClient().DeleteAsync(_index).Wait();
-        }
+        //[TearDown]
+        //public void Teardown()
+        //{
+        //    _sut = new ElasticBand(new DefaultHttpClientFactory(), new ElasticQueryBuilder());
+        //    _sut.GetClient().DeleteAsync(_index).Wait();
+        //}
 
         [Test]
         public async Task ElasticBand_methods_should_index_get_query_and_delete_documents_in_elasticsearch()
@@ -140,6 +142,9 @@ namespace Tests
             // Decide the index name and instantiate an ElasticBand...
             var index = "testindex2";
             var elasticBand = new ElasticBand(new DefaultHttpClientFactory(), new ElasticQueryBuilder());
+            elasticBand.SetElasticsearchUrl("https://localhost:9200");
+            elasticBand.SetElasticsearchAuthentication("B0pGRnABUbqCwsoaMxi0:gexHoph8SnK_HpTuLkOgtw");
+            
             elasticBand.GetClient().DeleteAsync(index).Wait();
 
             // Create some objects to index

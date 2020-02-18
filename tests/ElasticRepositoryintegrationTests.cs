@@ -17,13 +17,15 @@ namespace Tests
         public void Setup()
         {
             _elasticBand = new ElasticBand(new DefaultHttpClientFactory(), new ElasticQueryBuilder());
+            _elasticBand.SetElasticsearchUrl("https://localhost:9200");
+            _elasticBand.SetElasticsearchAuthentication("B0pGRnABUbqCwsoaMxi0:gexHoph8SnK_HpTuLkOgtw");
             _elasticBand.GetClient().DeleteAsync(_index).Wait();
         }
 
         [TearDown]
         public void Teardown()
         {
-            _elasticBand = new ElasticBand(new DefaultHttpClientFactory(), new ElasticQueryBuilder());
+            //_elasticBand = new ElasticBand(new DefaultHttpClientFactory(), new ElasticQueryBuilder());
             _elasticBand.GetClient().DeleteAsync(_index).Wait();
         }
 

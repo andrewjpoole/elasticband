@@ -10,6 +10,19 @@
             </summary>
             <param name="url">A string containing the url</param>
         </member>
+        <member name="M:AJP.ElasticBand.ElasticBand.SetElasticsearchAuthentication(System.String,System.String)">
+            <summary>
+            Method to set username and password, used to dd a basic auth header to authenticate with elasticsearch.
+            </summary>
+            <param name="username">A string containing the username.</param>
+            <param name="password">A string containing the password.</param>
+        </member>
+        <member name="M:AJP.ElasticBand.ElasticBand.SetElasticsearchAuthentication(System.String)">
+            <summary>
+            Method to set apiKey, used to dd a basic auth header to authenticate with elasticsearch.
+            </summary>
+            <param name="apiKey">A string containing the preconfigured apiKey.</param>
+        </member>
         <member name="M:AJP.ElasticBand.ElasticBand.SetJsonSerialiserOptions(System.Text.Json.JsonSerializerOptions)">
             <summary>
             Override the Json serializer options
