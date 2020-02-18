@@ -12,6 +12,6 @@ namespace AJP.ElasticBand
                 .AddSingleton<IElasticBand, ElasticBand>();
 
             return services;
-        }
+        }        
     }
 }

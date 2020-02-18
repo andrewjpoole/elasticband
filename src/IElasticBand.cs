@@ -13,6 +13,10 @@ namespace AJP.ElasticBand
         /// <param name="url">A string containing the url</param>
         void SetElasticsearchUrl(string url);
 
+        void SetElasticsearchAuthentication(string apiKey);
+
+        void SetElasticsearchAuthentication(string username, string password);
+
         /// <summary>
         /// Override the Json serializer options
         /// </summary>
