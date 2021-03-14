@@ -1,6 +1,9 @@
 # ElasticBand
  
- ![build](https://andrewjpoole.visualstudio.com/elasticband/_apis/build/status/andrewjpoole.elasticband?branchName=master)
+![build](https://andrewjpoole.visualstudio.com/elasticband/_apis/build/status/andrewjpoole.elasticband?branchName=master)
+![Nuget](https://img.shields.io/nuget/v/AJP.elasticband?label=nuget%20version)
+![Nuget](https://img.shields.io/nuget/dt/AJP.elasticband?label=nuget%20downloads)
+
  
 ## What is it?
 
